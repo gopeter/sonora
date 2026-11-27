@@ -32,6 +32,8 @@ impl LibraryTab {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum NavEntry {
     Home,
+    /// The provider's page of what is new, shown only where the provider has one.
+    New,
     Search,
     Songs,
     Albums,
@@ -43,8 +45,9 @@ pub enum NavEntry {
 }
 
 impl NavEntry {
-    pub const ALL: [Self; 9] = [
+    pub const ALL: [Self; 10] = [
         Self::Home,
+        Self::New,
         Self::Search,
         Self::History,
         Self::Settings,
@@ -58,6 +61,7 @@ impl NavEntry {
     pub fn id(self) -> &'static str {
         match self {
             Self::Home => "home",
+            Self::New => "new",
             Self::Search => "search",
             Self::Songs => "songs",
             Self::Albums => "albums",
@@ -72,6 +76,7 @@ impl NavEntry {
     pub fn key(self) -> &'static str {
         match self {
             Self::Home => "nav-home",
+            Self::New => "nav-new",
             Self::Search => "nav-search",
             Self::Songs => "nav-songs",
             Self::Albums => "nav-albums",

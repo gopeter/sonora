@@ -56,6 +56,7 @@ runtime-hours = { $hours }h { $minutes }m
 # navigation
 nav-history = Recents
 nav-home = Home
+nav-new = New
 nav-search = Search
 nav-library = Your Library
 sidebar-library = Library

@@ -1266,6 +1266,59 @@ impl AppleClient {
         }
     }
 
+    /// The page the web player calls New: the editors' shelves of new releases, new songs and
+    /// updated playlists for the storefront. A shelf with nothing Sonora can show is left out,
+    /// and so is the carousel at its top, which only repeats what the shelves hold.
+    async fn new_feed(&self) -> Result<GenreDetail> {
+        let path = format!(
+            "/editorial/{}/groupings",
+            escape::component(&self.storefront)
+        );
+        let body = self
+            .get(
+                &path,
+                &[
+                    ("name", "music"),
+                    ("platform", "web"),
+                    ("art[url]", "f"),
+                    ("include[albums]", "artists"),
+                    ("include[songs]", "artists,albums"),
+                ],
+            )
+            .await?;
+        let answered: wire::Answer = wire::answer(&body);
+        let shelves = answered
+            .data
+            .first()
+            .and_then(|grouping| grouping.relationships.tabs.rows().first())
+            .map(|tab| tab.relationships.children.rows())
+            .unwrap_or_default();
+        let sections = shelves
+            .iter()
+            .filter_map(|shelf| {
+                let title = wire::text(&shelf.attributes.as_ref()?.name)?;
+                let items: Vec<GenreItem> = shelf
+                    .relationships
+                    .contents
+                    .rows()
+                    .iter()
+                    .filter_map(|row| match row.kind.as_str() {
+                        Some("albums") => wire::album(row).map(GenreItem::Album),
+                        Some("playlists") => wire::playlist(row).map(GenreItem::Playlist),
+                        Some("songs") => wire::song(row, &self.root_genre).map(GenreItem::Track),
+                        _ => None,
+                    })
+                    .collect();
+                (!items.is_empty()).then_some(GenreSection { title, items })
+            })
+            .collect::<Vec<_>>();
+        log::debug!("apple: the new page has {} shelves", sections.len());
+        Ok(GenreDetail {
+            name: "nav-new".to_owned(),
+            sections,
+        })
+    }
+
     /// Charts for the whole storefront or one genre, as sections a page can draw.
     async fn charts(&self, genre: Option<&str>) -> Result<Vec<GenreSection>> {
         let limit = "12";
@@ -2445,6 +2498,9 @@ impl MusicApi for AppleClient {
     }
 
     async fn genre(&self, genre_id: &str) -> Result<GenreDetail> {
+        if genre_id == music::NEW_FEED {
+            return self.new_feed().await;
+        }
         let body = self
             .get(
                 &self.catalog(&format!("/genres/{}", escape::component(genre_id))),

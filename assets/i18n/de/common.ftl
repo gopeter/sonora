@@ -48,6 +48,7 @@ runtime-hours = { $hours } h { $minutes } min
 # navigation
 nav-history = Wiedergabeverlauf
 nav-home = Start
+nav-new = Neu
 nav-search = Suche
 nav-library = Deine Bibliothek
 nav-settings = Einstellungen

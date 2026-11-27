@@ -29,6 +29,7 @@ use async_trait::async_trait;
 use jiff::fmt::temporal::DateTimeParser;
 
 pub use calendar::ReleaseDate;
+pub use models::NEW_FEED;
 pub use models::SearchPart;
 pub use models::{
     Album, AlbumCatalogue, AlbumDetail, Arrival, Artist, ArtistCatalogue, ArtistProfile, ArtistRef,
@@ -1122,6 +1123,9 @@ pub struct Capabilities {
     /// A playlist can be made public or private. A service whose playlists have no such setting
     /// leaves this off, and the menu item that changes it is never shown.
     pub playlist_visibility: bool,
+    /// The provider has a page of what is new, opened as the genre `NEW_FEED`, and the
+    /// sidebar offers a way to it.
+    pub new_feed: bool,
 }
 
 impl Capabilities {
@@ -1147,6 +1151,7 @@ impl Capabilities {
         song_arrival: None,
         playlist_arrival: None,
         playlist_visibility: true,
+        new_feed: false,
     };
 
     /// Nothing beyond listing and playing.
@@ -1168,6 +1173,7 @@ impl Capabilities {
         song_arrival: None,
         playlist_arrival: None,
         playlist_visibility: false,
+        new_feed: false,
     };
 }
 

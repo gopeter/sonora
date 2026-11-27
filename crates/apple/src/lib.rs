@@ -137,6 +137,7 @@ fn session(client: AppleClient, profile: music::UserProfile) -> ProviderSession 
             qualities: stream::QUALITIES,
             song_arrival: Some(Arrival::NewestFirst),
             playlist_arrival: Some(Arrival::OldestFirst),
+            new_feed: true,
             ..Capabilities::NONE
         },
     }

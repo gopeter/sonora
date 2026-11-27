@@ -122,6 +122,7 @@ impl LocalProvider {
                 song_arrival: None,
                 playlist_arrival: Some(Arrival::OldestFirst),
                 playlist_visibility: true,
+                new_feed: false,
             },
         })
     }
