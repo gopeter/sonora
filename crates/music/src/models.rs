@@ -306,6 +306,11 @@ pub struct Genre {
     pub cover: Option<String>,
 }
 
+/// The genre id that names the provider's page of what is new, its editors' shelves of fresh
+/// releases and updated playlists. It opens through `MusicApi::genre` like any genre, for a
+/// provider whose capabilities offer `new_feed`.
+pub const NEW_FEED: &str = "new";
+
 /// One card of a browse shelf. A provider's home and genre pages mix whatever the shelf holds,
 /// so a track or an artist sits beside albums and playlists in the same row.
 #[derive(Clone, Debug, PartialEq)]

@@ -285,6 +285,12 @@ pub struct Relationships<'a> {
     pub tracks: Relation<'a>,
     #[serde(deserialize_with = "loose")]
     pub contents: Relation<'a>,
+    /// The tabs of an editorial grouping, the page the web player's New is drawn from.
+    #[serde(deserialize_with = "loose")]
+    pub tabs: Relation<'a>,
+    /// The shelves of an editorial tab.
+    #[serde(deserialize_with = "loose")]
+    pub children: Relation<'a>,
     #[serde(rename = "audio-analysis", deserialize_with = "loose")]
     pub audio_analysis: Relation<'a>,
 }

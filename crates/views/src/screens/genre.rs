@@ -1,8 +1,8 @@
 use gpui::accesskit::Role;
 use gpui::prelude::*;
 use gpui::{
-    AnyElement, App, Context, Entity, FontWeight, Pixels, Render, ScrollHandle, SharedString,
-    WeakEntity, Window, div, px,
+    AnyElement, App, Context, Entity, FontWeight, Pixels, Render, ScrollHandle, WeakEntity, Window,
+    div, px,
 };
 use i18n::t;
 use state::{AppSettings, GenreDetails, Playback, Sonora};
@@ -186,7 +186,9 @@ impl Render for GenreView {
                                 )
                             })
                             .when_some(title, |this, title| {
-                                let name = SharedString::from(title);
+                                // A provider names its New page by a Fluent key, and any
+                                // other genre by its own name, which stays as it is.
+                                let name = i18n::translate(&title);
                                 this.child(
                                     div()
                                         .id("genre-title")
